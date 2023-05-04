@@ -97,8 +97,116 @@ class Intro extends Phaser.Scene {
         super('intro')
     }
     create() {
-        this.add.text(50,50, "Adventure awaits!").setFontSize(50);
-        this.add.text(50,100, "Click anywhere to begin.").setFontSize(20);
+
+        let text1 = this.add.text(
+            0,//x
+            0,//y
+            `You are a solider, but you are in jail because of the frame-up of others. Soon after, you will be sentenced to death.`, //text
+            {
+                font: "28px Arial",
+                color: "#ffffff",
+            } //style
+        );
+        text1.setOrigin(0);
+        text1.setPosition(this.cameras.main.centerX-800, this.cameras.main.centerY-300);
+        text1.alpha = 0;
+
+        let text2 = this.add.text(
+            0,//x
+            0,//y
+            `While you wait in despair in the prison, but suddenly see the guards suddenly for unknown reasons gathered and left the prison.`, //text
+            {
+                font: "28px Arial",
+                color: "#ffffff",
+            } //style
+        );
+        text2.setOrigin(0);
+        text2.setPosition(this.cameras.main.centerX-800, this.cameras.main.centerY-225);
+        text2.alpha = 0;
+
+        let text3 = this.add.text(
+            0,//x
+            0,//y
+            `You know that this is your last chance. The only way to prove your innocence is to live.`, //text
+            {
+                font: "28px Arial",
+                color: "#ffffff",
+            } //style
+        );
+        text3.setOrigin(0);
+        text3.setPosition(this.cameras.main.centerX-800, this.cameras.main.centerY-150);
+        text3.alpha = 0;
+
+        let text4 = this.add.text(
+            0,//x
+            0,//y
+            `Find a way to get out of this prison.`, //text
+            {
+                font: "28px Arial",
+                color: "#ffffff",
+            } //style
+        );
+        text4.setOrigin(0);
+        text4.setPosition(this.cameras.main.centerX-800, this.cameras.main.centerY-75);
+        text4.alpha = 0;
+
+        let startText = this.add.text(
+            0,//x
+            0,//y
+            "Click to Start", //text
+            {
+                font: "40px Arial",
+                color: "#ffffff",
+            }
+        );
+
+        
+
+        startText.setOrigin(0.5);
+        startText.setPosition(this.cameras.main.centerX, this.cameras.main.centerY+300);
+        startText.alpha = 0;
+
+        this.tweens.add({
+            targets: text1,
+            alpha:{from: 0, to: 1},
+            duration: 1000,
+            ease: 'Linear',
+        });
+
+        this.tweens.add({
+            targets: text2,
+            alpha:{from: 0, to: 1},
+            delay:1000,
+            duration: 1000, 
+            ease: 'Linear',
+        });
+
+        this.tweens.add({
+            targets: text3,
+            alpha:{from: 0, to: 1},
+            delay:2000,
+            duration: 1000,
+            ease: 'Linear',
+        });
+
+        this.tweens.add({
+            targets: text4,
+            alpha:{from: 0, to: 1},
+            delay:3000,
+            duration: 1000,
+            ease: 'Linear',
+        });
+
+        this.animation = this.tweens.add({
+            targets: startText,
+            alpha:1,
+            delay:4000,
+            duration: 1500,
+            ease: 'Linear',
+            yoyo: true,
+            repeat:-1,
+        });
+
         this.input.on('pointerdown', () => {
             this.cameras.main.fade(1000, 0,0,0);
             this.time.delayedCall(1000, () => this.scene.start('demo1'));
@@ -125,7 +233,7 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    scene: [Intro, Demo1, Demo2, Outro],
+    scene: [Intro,Demo1],
     title: "Adventure Game",
 });
 
