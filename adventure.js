@@ -156,6 +156,16 @@ class AdventureScene extends Phaser.Scene {
         return temp;
     }
 
-    set
+    shakeTween()
+    {
+        this.tweens.add({
+            targets: this.cameras.main,
+            x: "-=5",
+            y: "-=5",
+            duration: 100,
+            repeat: 5,
+            yoyo: true
+          });
+    }
 
 }

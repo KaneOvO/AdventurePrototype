@@ -1,5 +1,7 @@
 var bar_broken = false;
 var bed_move = false;
+var talk_num = 0;
+var switch1 = false;
 
 class Demo1 extends AdventureScene {
     constructor() {
@@ -68,6 +70,7 @@ class Demo1 extends AdventureScene {
                 if(this.hasItem("rebar"))
                 {
                     this.showMessage("You use the rebar to pry open the bar with force");
+                    this.shakeTween();
                     bar_broken = true;
                 }
                 else
@@ -130,30 +133,93 @@ class Demo2 extends AdventureScene {
     constructor() {
         super("demo2", "The second room has a long name (it truly does).");
     }
+
+    preload()
+    {
+        this.load.path = './assets/';
+        this.load.image('bar', 'bar.png');
+        this.load.image('door', 'door.png');
+    }
+
     onEnter() {
-        this.add.text(this.w * 0.3, this.w * 0.4, "just go back")
-            .setFontSize(this.s * 2)
-            .setInteractive()
-            .on('pointerover', () => {
-                this.showMessage("You've got no other choice, really.");
-            })
+
+        let cellBar1 = this.addsprite(this.w * 0.15, this.w * 0.47, "bar");
+        cellBar1.scale = 1.18;
+    
+        cellBar1.on('pointerover', () => this.showMessage("The prison cell of your cell, has been destroyed"))
             .on('pointerdown', () => {
                 this.gotoScene('demo1');
+        });
+
+        let cellBar2 = this.addsprite(this.w * 0.55, this.w * 0.47, "bar");
+        cellBar2.scale = 1.18;
+    
+        cellBar2.on('pointerover', () => this.showMessage("Another prison cell with an old man lying inside."))
+            .on('pointerdown', () => {
+                if(talk_num != 2)
+                {
+                    this.showMessage("You try to talk to the old man, but get no reply");
+                    talk_num++;
+                }
+                else
+                {
+                    this.showMessage("\"Be quite!\" the old man shouts as he throws something at you");
+                    this.gainItem('Mysterious Key');
+                    talk_num++;
+                }            
+        });
+
+        let door1 = this.addsprite(this.w * 0.55, this.w * 0.2, "door");
+        door1.scale = 3;
+
+        door1.on('pointerover', () => this.showMessage("Locked door with a sign that reads \"Guard Locker Room\""))
+            .on('pointerdown', () => {
+                if(this.hasItem("Mysterious Key"))
+                {
+                    this.gotoScene('demo3');
+                }
+                else
+                {
+                    this.showMessage("You don't have the key");
+                    this.tweens.add({
+                        targets: door1,
+                        y: '+=' + this.s,
+                        repeat: 2,
+                        yoyo: true,
+                        ease: 'Sine.inOut',
+                        duration: 100
+                    });
+                }            
             });
 
-        let finish = this.add.text(this.w * 0.6, this.w * 0.2, '(finish the game)')
-            .setInteractive()
-            .on('pointerover', () => {
-                this.showMessage('*giggles*');
+        let door2 = this.addsprite(this.w * 0.37, this.w * 0.075, "door");
+        door2.scale = 3;
+
+        door2.on('pointerover', () => this.showMessage("The door to the stairwell, which was locked"))
+        .on('pointerdown', () => {
+            if(switch1 == false)
+            {
+                this.showMessage("Maybe there will be a switch nearby.")
                 this.tweens.add({
-                    targets: finish,
-                    x: this.s + (this.h - 2 * this.s) * Math.random(),
-                    y: this.s + (this.h - 2 * this.s) * Math.random(),
+                    targets: door2,
+                    y: '+=' + this.s,
+                    repeat: 2,
+                    yoyo: true,
                     ease: 'Sine.inOut',
-                    duration: 500
+                    duration: 100
                 });
-            })
-            .on('pointerdown', () => this.gotoScene('outro'));
+            }
+            else
+            {
+                this.gotoScene('demo4');
+            }            
+        });
+
+        let switch2 = this.addsprite(this.w * 0.37, this.w * 0.075, "door");
+
+
+
+
     }
 }
 
@@ -387,8 +453,6 @@ class BE extends Phaser.Scene {
             duration: 1500,
             ease: 'Linear',
         });
-
-        
     }
 }
 
@@ -409,7 +473,7 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    scene: [Demo1,Demo2],
+    scene: [Demo2],
     title: "Adventure Game",
 });
 
