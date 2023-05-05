@@ -2,6 +2,7 @@ var bar_broken = false;
 var bed_move = false;
 var talk_num = 0;
 var switch_stairwell = false;
+var switch_gate = false;
 
 class Demo1 extends AdventureScene {
     constructor() {
@@ -281,14 +282,61 @@ class Demo4 extends AdventureScene {
     preload()
     {
         this.load.path = './assets/';
-        this.load.image('bar', 'bar.png');
         this.load.image('door', 'door.png');
+        this.load.image('gate', 'gate.png');
     }
 
     onEnter() {
 
-        
+        let door1 = this.addsprite(this.w * 0.35, this.w * 0.47, "door");
+        door1.scale = 3;
 
+        door1.on('pointerover', () => this.showMessage("Back to 2nd floor"))
+            .on('pointerdown', () => {
+                this.gotoScene("demo2") 
+        });
+
+        let gate = this.addsprite(this.w * 0.35, this.w * 0.12, "gate");
+        gate.scale = 1.5;
+
+        gate.on('pointerover', () => {
+            if(switch_gate == false)
+            {
+                this.showMessage("Leaving the gates of the prison, but it seems to be locked.")
+            }
+            else
+            {
+                this.showMessage("The gate has been unlocked.")
+            }
+            
+        })
+        .on('pointerdown', () => {
+            if(switch_gate == false)
+            {
+                this.showMessage("The gate is locked, try to find the switch nearby.")
+                this.tweens.add({
+                    targets: gate,
+                    y: '+=' + this.s,
+                    repeat: 2,
+                    yoyo: true,
+                    ease: 'Sine.inOut',
+                    duration: 100
+                });
+            }
+            else
+            {
+                if(this.hasItem("Guard uniform"))
+                {
+                    this.gotoScene("GE")
+                }
+                else
+                {
+                    this.gotoScene("BE")
+                }
+            }
+        });
+
+        
 
 
     }
@@ -544,7 +592,7 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    scene: [Demo3],
+    scene: [Intro,Demo1,Demo2,Demo3,Demo4],
     title: "Adventure Game",
 });
 

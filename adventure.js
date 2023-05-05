@@ -148,6 +148,7 @@ class AdventureScene extends Phaser.Scene {
         console.warn('This AdventureScene did not implement onEnter():', this.constructor.name);
     }
 
+    //add a funtion to creat a sprite and set it can be interactive
     addsprite(x, y, name)
     {
         let temp = this.add.sprite(x, y, name); 
@@ -156,6 +157,7 @@ class AdventureScene extends Phaser.Scene {
         return temp;
     }
 
+    //add a functuon to make the scene can be shake
     shakeTween()
     {
         this.tweens.add({
