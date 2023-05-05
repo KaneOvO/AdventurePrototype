@@ -1,7 +1,7 @@
 var bar_broken = false;
 var bed_move = false;
 var talk_num = 0;
-var switch1 = false;
+var switch_stairwell = false;
 
 class Demo1 extends AdventureScene {
     constructor() {
@@ -195,9 +195,9 @@ class Demo2 extends AdventureScene {
         let door2 = this.addsprite(this.w * 0.37, this.w * 0.075, "door");
         door2.scale = 3;
 
-        door2.on('pointerover', () => this.showMessage("The door to the stairwell, which was locked"))
+        door2.on('pointerover', () => this.showMessage("The door to the stairwell, which was locked."))
         .on('pointerdown', () => {
-            if(switch1 == false)
+            if(switch_stairwell == false)
             {
                 this.showMessage("Maybe there will be a switch nearby.")
                 this.tweens.add({
@@ -215,8 +215,56 @@ class Demo2 extends AdventureScene {
             }            
         });
 
-        let switch2 = this.addsprite(this.w * 0.37, this.w * 0.075, "door");
+        let clip = this.add.text(this.w * 0.41, this.w * 0.04, "🔘")
+        .setFontSize(this.s * 1.5)
+        .setInteractive()
+        .on('pointerover', () => this.showMessage("A button that seems to control the switch in the stairwell."))
+        .on('pointerdown', () => {
+            this.showMessage("The stairwell door is now unlocked.")
+            switch_stairwell = true;
+        })
 
+
+
+    }
+}
+
+class Demo3 extends AdventureScene {
+    constructor() {
+        super("demo2", "The second room has a long name (it truly does).");
+    }
+
+    preload()
+    {
+        this.load.path = './assets/';
+        this.load.image('bar', 'bar.png');
+        this.load.image('door', 'door.png');
+    }
+
+    onEnter() {
+
+        
+
+
+
+    }
+}
+
+class Demo4 extends AdventureScene {
+    constructor() {
+        super("demo2", "The second room has a long name (it truly does).");
+    }
+
+    preload()
+    {
+        this.load.path = './assets/';
+        this.load.image('bar', 'bar.png');
+        this.load.image('door', 'door.png');
+    }
+
+    onEnter() {
+
+        
 
 
 
