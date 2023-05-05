@@ -154,9 +154,8 @@ class AdventureScene extends Phaser.Scene {
         temp.setInteractive();
 
         return temp;
-
     }
 
-
+    set
 
 }
