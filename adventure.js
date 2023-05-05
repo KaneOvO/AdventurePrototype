@@ -147,4 +147,16 @@ class AdventureScene extends Phaser.Scene {
     onEnter() {
         console.warn('This AdventureScene did not implement onEnter():', this.constructor.name);
     }
+
+    addsprite(x, y, name)
+    {
+        let temp = this.add.sprite(x, y, name); 
+        temp.setInteractive();
+
+        return temp;
+
+    }
+
+
+
 }

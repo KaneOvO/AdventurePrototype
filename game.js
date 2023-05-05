@@ -1,62 +1,128 @@
+var bar_broken = false;
+var bed_move = false;
+
+
 class Demo1 extends AdventureScene {
     constructor() {
         super("demo1", "First Room");
     }
 
-    onEnter() {
+    preload()
+    {
+        this.load.path = './assets/';
+        this.load.image('door', 'door.png');
+        this.load.image('bar', 'bar.png');
+        this.load.image('bed', 'bed.png');
+    }
 
-        let clip = this.add.text(this.w * 0.3, this.w * 0.3, "📎 paperclip")
-            .setFontSize(this.s * 2)
-            .setInteractive()
-            .on('pointerover', () => this.showMessage("Metal, bent."))
+    onEnter() {
+        let door = this.addsprite(this.w * 0.35, this.w * 0.47, "door");
+        door.scale = 4;
+            
+        door.on('pointerover', () => this.showMessage("The door to the prison cell, but you don't have the key."))
             .on('pointerdown', () => {
-                this.showMessage("No touching!");
-                this.tweens.add({
-                    targets: clip,
-                    x: '+=' + this.s,
-                    repeat: 2,
-                    yoyo: true,
-                    ease: 'Sine.inOut',
-                    duration: 100
-                });
+            this.showMessage("Find the other way to leave the cell");
+            this.tweens.add({
+                targets: door,
+                y: '+=' + this.s,
+                repeat: 2,
+                yoyo: true,
+                ease: 'Sine.inOut',
+                duration: 100
+            });
+            });
+        
+        let cellBar1 = this.addsprite(this.w * 0.198, this.w * 0.47, "bar");
+        cellBar1.scale = 1.18;
+
+        cellBar1.on('pointerover', () => this.showMessage("The cell bars, which seem to have been in place for many years."))
+            .on('pointerdown', () => {
+            this.showMessage("Still strong, try the other side");
+
+            this.tweens.add({
+                targets: cellBar1,
+                y: '+=' + this.s,
+                repeat: 2,
+                yoyo: true,
+                ease: 'Sine.inOut',
+                duration: 100
             });
 
-        let key = this.add.text(this.w * 0.5, this.w * 0.1, "🔑 key")
-            .setFontSize(this.s * 2)
-            .setInteractive()
-            .on('pointerover', () => {
-                this.showMessage("It's a nice key.")
-            })
-            .on('pointerdown', () => {
-                this.showMessage("You pick up the key.");
-                this.gainItem('key');
-                this.tweens.add({
-                    targets: key,
-                    y: `-=${2 * this.s}`,
-                    alpha: { from: 1, to: 0 },
-                    duration: 500,
-                    onComplete: () => key.destroy()
-                });
-            })
+            });
 
-        let door = this.add.text(this.w * 0.1, this.w * 0.15, "🚪 locked door")
-            .setFontSize(this.s * 2)
-            .setInteractive()
-            .on('pointerover', () => {
-                if (this.hasItem("key")) {
-                    this.showMessage("You've got the key for this door.");
-                } else {
-                    this.showMessage("It's locked. Can you find a key?");
-                }
-            })
+        let cellBar2 = this.addsprite(this.w * 0.5, this.w * 0.47, "bar");
+        cellBar2.scale = 1.18;
+
+        cellBar2.on('pointerover', () => {
+            if (bar_broken == false){
+                this.showMessage("The cell bars, which seem to have been in place for many years(Maybe you can pry it open with something).")
+            }
+            else
+            {
+                this.showMessage("The cell bars has been broken.")
+            }
+            
+        })
             .on('pointerdown', () => {
-                if (this.hasItem("key")) {
-                    this.loseItem("key");
-                    this.showMessage("*squeak*");
-                    door.setText("🚪 unlocked door");
-                    this.gotoScene('demo2');
+            if (bar_broken == false)
+            {
+                if(this.hasItem("rebar"))
+                {
+                    this.showMessage("You use the rebar to pry open the bar with force");
+                    bar_broken = true;
                 }
-            })
+                else
+                {
+                    this.showMessage("You can't destroy it with your bare hands, maybe some tools are needed.");
+                    this.tweens.add({
+                        targets: cellBar2,
+                        y: '+=' + this.s,
+                        repeat: 2,
+                        yoyo: true,
+                        ease: 'Sine.inOut',
+                        duration: 100
+                    });
+                }
+            }
+            else
+            {
+                this.gotoScene('demo2');
+            }           
+        });
+
+        let bed = this.addsprite(this.w * 0.5, this.w * 0.1, "bed");
+        bed.scale = 0.7;
+
+        bed.on('pointerover', () =>{
+            if(bed_move == false)
+            {
+                this.showMessage("Dilapidated bed, you seem to have hidden something underneath.");
+            }
+            else
+            {
+                this.showMessage("Dilapidated bed, but great for hiding things.");
+            }
+        })
+        .on('pointerdown', () =>{
+            if(bed_move == false)
+            {
+                this.showMessage("You moved the bed and found the rebar hidden under it.");
+                this.tweens.add({
+                    targets: bed,
+                    x: this.w * 0.6,
+                    ease: 'Linear',
+                    yoyo:true,
+                    duration: 2000
+                });
+                this.gainItem('rebar');
+                bed_move = true;
+            }
+            else
+            {
+                this.showMessage("You don't have anything left to hide under the bed.");           
+            }
+        })
+        
 
     }
 }
@@ -233,7 +299,7 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    scene: [Intro,Demo1],
+    scene: [Demo1,Demo2],
     title: "Adventure Game",
 });
 
