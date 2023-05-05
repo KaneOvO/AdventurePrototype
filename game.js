@@ -1,7 +1,6 @@
 var bar_broken = false;
 var bed_move = false;
 
-
 class Demo1 extends AdventureScene {
     constructor() {
         super("demo1", "First Room");
@@ -226,8 +225,6 @@ class Intro extends Phaser.Scene {
             }
         );
 
-        
-
         startText.setOrigin(0.5);
         startText.setPosition(this.cameras.main.centerX, this.cameras.main.centerY+300);
         startText.alpha = 0;
@@ -263,7 +260,7 @@ class Intro extends Phaser.Scene {
             ease: 'Linear',
         });
 
-        this.animation = this.tweens.add({
+        this.tweens.add({
             targets: startText,
             alpha:1,
             delay:4000,
@@ -277,17 +274,130 @@ class Intro extends Phaser.Scene {
             this.cameras.main.fade(1000, 0,0,0);
             this.time.delayedCall(1000, () => this.scene.start('demo1'));
         });
+
     }
 }
 
-class Outro extends Phaser.Scene {
+class BE extends Phaser.Scene {
     constructor() {
-        super('outro');
+        super('Bad End');
     }
     create() {
-        this.add.text(50, 50, "That's all!").setFontSize(50);
-        this.add.text(50, 100, "Click anywhere to restart.").setFontSize(20);
-        this.input.on('pointerdown', () => this.scene.start('intro'));
+        let text1 = this.add.text(
+            0,//x
+            0,//y
+            `You open the gate of the prison and find that the prison seems to have been attacked and the scene is very chaotic.`, //text
+            {
+                font: "28px Arial",
+                color: "#ffffff",
+            } //style
+        );
+        text1.setOrigin(0);
+        text1.setPosition(this.cameras.main.centerX-800, this.cameras.main.centerY-300);
+        text1.alpha = 0;
+
+        let text2 = this.add.text(
+            0,//x
+            0,//y
+            `You try to use the chaos to leave the prison quietly.`, //text
+            {
+                font: "28px Arial",
+                color: "#ffffff",
+            } //style
+        );
+        text2.setOrigin(0);
+        text2.setPosition(this.cameras.main.centerX-800, this.cameras.main.centerY-225);
+        text2.alpha = 0;
+        
+        
+        let text4 = this.add.text(
+            0,//x
+            0,//y
+            `Unfortunately, the prison uniform you are wearing is too conspicuous, the guards still found you.`, //text
+            {
+                font: "28px Arial",
+                color: "#ffffff",
+            } //style
+        );
+        text4.setOrigin(0);
+        text4.setPosition(this.cameras.main.centerX-800, this.cameras.main.centerY-150);
+        text4.alpha = 0;
+
+        let text3 = this.add.text(
+            0,//x
+            0,//y
+            `You were caught.`, //text
+            {
+                font: "28px Arial",
+                color: "#ffffff",
+            } //style
+        );
+        text3.setOrigin(0);
+        text3.setPosition(this.cameras.main.centerX-800, this.cameras.main.centerY-75);
+        text3.alpha = 0;
+
+        let BeText = this.add.text(
+            0,//x
+            0,//y
+            "Bad End", //text
+            {
+                font: "70px Arial",
+                color: "#ff0000",
+            }
+        );
+        BeText.scale = 0;
+        BeText.setOrigin(0.5);
+        BeText.setPosition(this.cameras.main.centerX, this.cameras.main.centerY+300);
+
+        this.tweens.add({
+            targets: text1,
+            alpha:{from: 0, to: 1},
+            duration: 1000,
+            ease: 'Linear',
+        });
+
+        this.tweens.add({
+            targets: text2,
+            alpha:{from: 0, to: 1},
+            delay:1000,
+            duration: 1000, 
+            ease: 'Linear',
+        });
+
+        this.tweens.add({
+            targets: text3,
+            alpha:{from: 0, to: 1},
+            delay:3000,
+            duration: 1000,
+            ease: 'Linear',
+        });
+
+        this.tweens.add({
+            targets: text4,
+            alpha:{from: 0, to: 1},
+            delay:2000,
+            duration: 1000,
+            ease: 'Linear',
+        });
+
+        this.tweens.add({
+            targets: BeText,
+            scale:1.5,
+            delay:4000,
+            duration: 1500,
+            ease: 'Linear',
+        });
+
+        
+    }
+}
+
+class GE extends Phaser.Scene {
+    constructor() {
+        super('Good End');
+    }
+    create() {
+        
     }
 }
 
