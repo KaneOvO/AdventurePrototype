@@ -5,7 +5,7 @@ var switch_stairwell = false;
 
 class Demo1 extends AdventureScene {
     constructor() {
-        super("demo1", "First Room");
+        super("demo1", "Prison cell");
     }
 
     preload()
@@ -131,7 +131,7 @@ class Demo1 extends AdventureScene {
 
 class Demo2 extends AdventureScene {
     constructor() {
-        super("demo2", "The second room has a long name (it truly does).");
+        super("demo2", "The 2nd floor of the prison");
     }
 
     preload()
@@ -231,20 +231,43 @@ class Demo2 extends AdventureScene {
 
 class Demo3 extends AdventureScene {
     constructor() {
-        super("demo2", "The second room has a long name (it truly does).");
+        super("demo3", "The Guard Locker Room");
     }
 
     preload()
     {
         this.load.path = './assets/';
-        this.load.image('bar', 'bar.png');
         this.load.image('door', 'door.png');
+        this.load.image('closet', 'closet.png');
     }
 
     onEnter() {
 
-        
+        let door1 = this.addsprite(this.w * 0.35, this.w * 0.47, "door");
+        door1.scale = 3;
 
+        door1.on('pointerover', () => this.showMessage("Back to 2nd floor"))
+            .on('pointerdown', () => {
+                this.gotoScene("demo2") 
+        });
+
+        let closet = this.addsprite(this.w * 0.35, this.w * 0.1, "closet");
+        closet.scale = 0.25;
+
+        closet.on('pointerover', () => this.showMessage("The guards' closet, in which many pieces of guards' uniforms are placed."))
+        .on('pointerdown', () => {
+            if(this.hasItem("Guard uniform"))
+            {
+                this.showMessage("You're already wearing a guard's uniform.")
+            }
+            else
+            {
+                this.showMessage("You open the closet and change into a guard's uniform.")
+                this.gainItem("Guard uniform")
+            }
+        })
+        
+        
 
 
     }
@@ -252,7 +275,7 @@ class Demo3 extends AdventureScene {
 
 class Demo4 extends AdventureScene {
     constructor() {
-        super("demo2", "The second room has a long name (it truly does).");
+        super("demo4", "The 1st floor of the prison");
     }
 
     preload()
@@ -521,7 +544,7 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    scene: [Demo2],
+    scene: [Demo3],
     title: "Adventure Game",
 });
 
