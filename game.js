@@ -2,7 +2,7 @@ var bar_broken = false;
 var bed_move = false;
 var talk_num = 0;
 var switch_stairwell = false;
-var switch_gate = false;
+var switch_box = false;
 
 class Demo1 extends AdventureScene {
     constructor() {
@@ -284,6 +284,7 @@ class Demo4 extends AdventureScene {
         this.load.path = './assets/';
         this.load.image('door', 'door.png');
         this.load.image('gate', 'gate.png');
+        this.load.image('powerbox', 'powerbox.png');
     }
 
     onEnter() {
@@ -300,9 +301,9 @@ class Demo4 extends AdventureScene {
         gate.scale = 1.5;
 
         gate.on('pointerover', () => {
-            if(switch_gate == false)
+            if(switch_box == false)
             {
-                this.showMessage("Leaving the gates of the prison, but it seems to be locked.")
+                this.showMessage("The gate doesn't seem to be electrified and you can't open it.")
             }
             else
             {
@@ -311,9 +312,9 @@ class Demo4 extends AdventureScene {
             
         })
         .on('pointerdown', () => {
-            if(switch_gate == false)
+            if(switch_box == false)
             {
-                this.showMessage("The gate is locked, try to find the switch nearby.")
+                this.showMessage("Find a way to power up the gate.")
                 this.tweens.add({
                     targets: gate,
                     y: '+=' + this.s,
@@ -336,8 +337,23 @@ class Demo4 extends AdventureScene {
             }
         });
 
-        
+        let powerbox = this.addsprite(this.w * 0.6, this.w * 0.12, "powerbox");
+        powerbox.scale = 0.5;
 
+        powerbox.on('pointerover', () => {
+            if(switch_box == false)
+            {
+                this.showMessage("The electric switch closed.")
+            }
+            else
+            {
+                this.showMessage("The electric switch opened.")
+            }  
+        })
+            .on('pointerdown', () => {
+                this.showMessage("You opened the electric switch.")
+                switch_box = true;
+        });
 
     }
 }
@@ -580,7 +596,112 @@ class GE extends Phaser.Scene {
         super('Good End');
     }
     create() {
+        let text1 = this.add.text(
+            0,//x
+            0,//y
+            `You open the gate of the prison and find that the prison seems to have been attacked and the scene is very chaotic.`, //text
+            {
+                font: "28px Arial",
+                color: "#ffffff",
+            } //style
+        );
+        text1.setOrigin(0);
+        text1.setPosition(this.cameras.main.centerX-800, this.cameras.main.centerY-300);
+        text1.alpha = 0;
+
+        let text2 = this.add.text(
+            0,//x
+            0,//y
+            `In the chaos, you are well protected by the guard suit, no guards found your identity.`, //text
+            {
+                font: "28px Arial",
+                color: "#ffffff",
+            } //style
+        );
+        text2.setOrigin(0);
+        text2.setPosition(this.cameras.main.centerX-800, this.cameras.main.centerY-225);
+        text2.alpha = 0;
         
+        
+        let text3 = this.add.text(
+            0,//x
+            0,//y
+            `You finally managed to escape from the prison.`, //text
+            {
+                font: "28px Arial",
+                color: "#ffffff",
+            } //style
+        );
+        text3.setOrigin(0);
+        text3.setPosition(this.cameras.main.centerX-800, this.cameras.main.centerY-150);
+        text3.alpha = 0;
+
+        let GeText = this.add.text(
+            0,//x
+            0,//y
+            "Good End", //text
+            {
+                font: "70px Arial",
+                color: "#00ffff",
+            }
+        );
+        GeText.scale = 0;
+        GeText.setOrigin(0.5);
+        GeText.setPosition(this.cameras.main.centerX, this.cameras.main.centerY+300);
+
+        let ThankText = this.add.text(
+            0,//x
+            0,//y
+            `Thank you for you playing`, //text
+            {
+                font: "40px Arial",
+                color: "#ffffff",
+            } //style
+        );
+        ThankText.setOrigin(0.5);
+        ThankText.setPosition(this.cameras.main.centerX, this.cameras.main.centerY+375);
+        ThankText.alpha = 0;
+
+        this.tweens.add({
+            targets: text1,
+            alpha:{from: 0, to: 1},
+            duration: 1000,
+            ease: 'Linear',
+        });
+
+        this.tweens.add({
+            targets: text2,
+            alpha:{from: 0, to: 1},
+            delay:1000,
+            duration: 1000, 
+            ease: 'Linear',
+        });
+
+        this.tweens.add({
+            targets: text3,
+            alpha:{from: 0, to: 1},
+            delay:2000,
+            duration: 1000,
+            ease: 'Linear',
+        });
+
+        this.tweens.add({
+            targets: GeText,
+            scale:1.5,
+            delay:3000,
+            duration: 1500,
+            ease: 'Linear',
+        });
+
+        this.tweens.add({
+            targets: ThankText,
+            alpha:1,
+            delay:4000,
+            duration: 1500,
+            yoyo:true,
+            ease: 'Linear',
+            repeat: -1,
+        });
     }
 }
 
@@ -592,7 +713,7 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    scene: [Intro,Demo1,Demo2,Demo3,Demo4],
+    scene: [GE],
     title: "Adventure Game",
 });
 
