@@ -481,7 +481,7 @@ class Intro extends Phaser.Scene {
 
 class BE extends Phaser.Scene {
     constructor() {
-        super('Bad End');
+        super('BE');
     }
     create() {
         let text1 = this.add.text(
@@ -593,7 +593,7 @@ class BE extends Phaser.Scene {
 
 class GE extends Phaser.Scene {
     constructor() {
-        super('Good End');
+        super('GE');
     }
     create() {
         let text1 = this.add.text(
@@ -713,7 +713,7 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    scene: [GE],
+    scene: [Intro,Demo1,Demo2,Demo3,Demo4,BE,GE],
     title: "Adventure Game",
 });
 
